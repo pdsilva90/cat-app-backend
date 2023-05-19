@@ -12,8 +12,8 @@ const getAllCats = async (req, res) => {
 
 const createCat = async (req, res) => {
     try {
-        const cats = await Cat.create(req.body)
-        res.json(cats)
+        const cat = await Cat.create(req.body)
+        res.json(cat)
     } catch {
         res.json({ msg: 'There was a problem creating your cat.'})
     }

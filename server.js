@@ -1,16 +1,24 @@
-const express = require('Express');
+const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.port || 3000;
 const cors = require('cors');
-const catRouter = require('./routes/cats')
+const catRoutes = require('./routes/cats');
+
+require('dotenv').config()
+
+//db connection
+require('./config/database');
 
 //middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
+app.get('/', (req, res) => {
+    res.json({ msg: 'Welcome'});
+})
 
 //routes
 app.use('/cats', catRoutes);
-app.use(cors());
 
 app.listen(port, () => {
     console.log('I am listening at port 3000');

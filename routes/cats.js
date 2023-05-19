@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose')
 const Cat = require('../models/cat');
+const catController = require('../controllers/cats');
 
 
 async function main() {
@@ -14,55 +15,19 @@ console.log('Connected to MongoDB');
 
 //ROUTES
 //GET all cats
-router.get('/', async (req,res) => {
-    try {
-        const cats = await Cat.find({});
-        res.json(cats)
-    } catch {
-        res.json({ msg: 'There was a problem getting all of the cats!'});
-    }
-});
+router.get('/', catController.getAllCats);
 
 //POST a new cat
-router.post('/', async (req,res) => {
-    try {
-    const cat = await Cat.create(req.body);
-    res.json(cat);
-    } catch {
-    res.json({ msg: 'There was a problem creating your cat.'});
-    }
-});
+router.post('/', catController.createCat);
 
 //GET a single cat
-router.get('/:id', async (req, res) => {
-    try {
-        const cat = await Cat.findById(req.params.id);
-        res.json(cat)
-    } catch {
-        res.json({ msg: 'There was a problem getting your cat.'});
-    }
-});
+router.get('/:id', catController.getACat);
 
 //PUT to update  a cat
-router.put('/:id', async (req, res) => {
-    try {
-        const updatedCat = await Cat.findByIdAndUpdate(req.params.id, { set: {name: req.body.name}}, { new: true })
-        //new returns the update object instead of the previous object 
-        res.json(updateCat);
-    } catch {
-        res.json({ msg: 'There was problem updating your cat.'})
-    }
-});
+router.put('/:id', catController.updateCat);
 
 //DELETE to destroy a cat
-router.delete('/:id', async (req, res) => {
-    try {
-        await Cat.findByIdAndDelete(req.params.id);
-        res.json({ msg: 'This cat has successfully been adopted'});
-    } catch {
-        res.json({ msg: 'There was a problem deleting your cat'})
-    }
-});
+router.delete('/:id', catController.removeCat);
 
 
 module.export = router
